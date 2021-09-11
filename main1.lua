@@ -1,0 +1,15 @@
+require("vector")
+
+function love.load()
+	vec1 = Vector:create(1,2)
+	vec2 = Vector:create(1,2)
+	print(vec1 + vec2)
+	print(vec1 - vec2)
+	print(vec1 * 10)
+	print(vec1 / 10)
+	vec3 = Vector:create(3,0)
+	print(vec3:mag())
+	print(vec3:norm())
+	vec4 = Vector:create(1,1)
+	print(vec4:norm())
+end
