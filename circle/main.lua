@@ -1,6 +1,8 @@
 require("vector")
 require("mover")
 
+--Задание. Добавить две области: с положительным трением и отрицательным.
+
 function love.load()
 	width = love.graphics.getWidth()
 	height = love.graphics.getHeight()
@@ -8,11 +10,11 @@ function love.load()
 		128/255,
 		128/255)
 
-	location = Vector:create(width/ 2, height/2)
+	location = Vector:create(width/ 4, height/2)
 	velocity = Vector:create(0,0)
 	mover = Mover:create(location, velocity)
-	wmover = Mover:create(location, velocity, 5)
-	wmover.size = 30
+	wmover = Mover:create(location1, velocity)
+	--wmover.size = 30
 
 	wind = Vector:create(0.01, 0)
 	isWind = false
@@ -23,17 +25,38 @@ function love.load()
 end
 
 function love.update()
-	if isGravity then
-		mover:applyForce(gravity)
-		wmover:applyForce(gravity)
+	--if isGravity then
+	--	mover:applyForce(gravity)
+	--	wmover:applyForce(gravity)
+	--end
+	--if isWind then
+	--	mover:applyForce(wind)
+	--	wmover:applyForce(wind)
+	--end
+	--if isFloating then
+	--	mover:applyForce(floating)
+	--	wmover:applyForce(floating)
+	--end
+
+	--Другое
+	mover:applyForce(gravity)
+	wmover:applyForce(gravity)
+	--mover:applyForce(wind)
+	--wmover:applyForce(wind)
+	if mover.location.x < width/2 then
+		friction = (mover.velocity * -1):norm()
+		if friction then
+			friction:mul(0.005)
+			mover:applyForce(friction)
+		end
 	end
-	if isWind then
-		mover:applyForce(wind)
-		wmover:applyForce(wind)
-	end
-	if isFloating then
-		mover:applyForce(floating)
-		wmover:applyForce(floating)
+
+	if mover.location.x > width/2 then
+		friction = (mover.velocity):norm()
+		if friction then
+			friction:mul(0.005)
+			wmover:applyForce(friction)
+		end
 	end
 
 	mover:update()
@@ -43,15 +66,19 @@ function love.update()
 end
 
 function love.draw()
+	local r, g, b, a = love.graphics.getColor()
+	love.graphics.setColor(0, 119/255, 190/ 255, 0.5)
+	love.graphics.rectangle("fill", width/2, 0, width/2, height)
+	love.graphics.setColor(r,g,b,a)
 	mover:draw()
 	wmover:draw()
 
 	love.graphics.print(tostring(mover.velocity),
-								mover.location.x + 20,
+								mover.location.x + mover.size,
 								mover.location.y)
 
 	love.graphics.print(tostring(wmover.velocity),
-								wmover.location.x + 20,
+								wmover.location.x + wmover.size,
 								wmover.location.y)
 
 	love.graphics.print("w: " .. tostring(isWind) ..
