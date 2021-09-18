@@ -9,11 +9,12 @@ function Mover:create(x,y)
 	mover.acceleration = Vector:create(0,0)
 	mover.size = 20
 	mover.weight = weight or 1
+
 	return mover
 end
 
 function Mover:applyForce(force)
-	self.acceleration:add(force*self.weight)
+	self.acceleration:add(force/self.weight)
 end
 
 function Mover:checkBoundaries()
