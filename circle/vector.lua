@@ -40,3 +40,13 @@ function Vector:norm()
 		return self / m
 	end
 end
+
+function Vector:mul(value)
+	self.x = self.x * value
+	self.y = self.y * value
+end
+
+function Vector:add(other)
+	self.x = self.x + other.x
+	self.y = self.y + other.y
+end
